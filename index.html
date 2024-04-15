@@ -5,71 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Peer to Peer Chat App</title>
     <link rel="stylesheet" href="plugins/bootstrap/style.css" />
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-    <style>
-      .message-container {
-        position: absolute;
-        bottom: 0;
-      }
-      .sender {
-        background-color: #5c90ff;
-        color: white;
-        max-width: max-content; 
-      }
-      .recieved {
-        background-color: grey;
-        color: white;
-        max-width: max-content; 
-      }
-      .bg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 5vw;
-      font-weight: 800;
-      width: 100%;
-      text-align: center;
-      opacity: 0.1;
-      user-select: none;
-      z-index: -999;
-    }
-    .peerid-container{
-      background-color: #252525;
-      color: white;
-    }
-    #recipentidspan{
-      cursor: pointer;
-    }
-    #messages{
-      height: 80vh;
-      overflow-y: scroll;
-      width: 100%;
-      scrollbar-width: thin;
-      scrollbar-color: #252525 transparent;
-    }
-    ::-webkit-scrollbar-track {
-    border-radius: 16px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 16px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  }
-    </style>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="bg">Peer to Peer Anonymous Chat</div>
     <div class="error-container d-flex">
       <span class="alert alert-danger d-none w-100" id="errorAlert"></span>
     </div>
-    <div id="peeridContainer" class="peerid-container w-100 d-flex justify-content-center p-3">
+    <div
+      id="peeridContainer"
+      class="peerid-container w-100 d-flex justify-content-center p-3"
+    >
       <span class="fs-4 fw-bold">
-        Your Peer ID : <span id="peeridspan" class="text-white fw-semibold"></span>
-       <span class="d-none d-md-inline">| </span> <br class="d-block d-md-none"> Recipent Peer ID : <span id="recipentidspan" class="text-white fw-semibold"></span>
-
-    </span>
+        Your Peer ID :
+        <span id="peeridspan" class="text-white fw-semibold"></span>
+        <span class="d-none d-md-inline">| </span>
+        <br class="d-block d-md-none" />
+        Recipent Peer ID :
+        <span id="recipentidspan" class="text-white fw-semibold"></span>
+      </span>
     </div>
     <div class="message-box-container vw-100 vh-80">
       <div id="messages" class="d-inline-flex flex-column gap-2 pt-2"></div>
@@ -131,92 +86,6 @@
     <script src="plugins/jquery/script.js"></script>
     <script src="plugins/bootstrap/script.js"></script>
     <script src="plugins/peerjs/script.js"></script>
-    <script>
-      const peerId = Math.random().toString(36).substr(2, 9);
-      let recipientId = "";
-      $("#recipentidspan").on("click",function(){
-        $("#peeridPrompt").modal("show");
-      });
-      document.getElementById("message").addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); 
-        enterRecieverID();
-      }
-    });
-
-      const peer = new Peer(peerId);
-      peer.on("open", () => {
-        const peerIdSpan = document.getElementById("peeridspan");
-        peerIdSpan.innerHTML = peer.id.toString();
-      });
-      peer.on("connection", handleConnection);
-
-      function handleConnection(conn) {
-        // console.log("Incoming connection from " + conn.peer);
-        conn.on("data", (data) => handleMessage(data, conn));
-      }
-
-      function handleMessage(data, conn) {
-        const messages = document.getElementById("messages");
-        const messageElement = document.createElement("div");
-        messageElement.classList.add(
-          "recieved",
-          "px-3",
-          "py-1",
-          "mx-2",
-          "rounded-3"
-        );
-        messageElement.innerText = conn.peer + " : " + data;
-        messages.appendChild(messageElement);
-        recipientId = conn.peer.toString();
-        $("#recipentidspan").html(recipientId);
-      }
-      function enterRecieverID() {
-        if (document.getElementById("message").value != "") {
-          if (recipientId == "") {
-            $("#peeridPrompt").modal("show");
-          }
-          else{
-            sendMessage();
-          }
-        } else {
-          $("#errorAlert").removeClass("d-none");
-          $("#errorAlert").html("Please enter a message");
-          setTimeout(() => {
-            $("#errorAlert").addClass("d-none");
-          }, 3000);
-        }
-      }
-
-      function sendMessage() {
-        $("#peeridPrompt").modal("hide");
-        const messageInput = document.getElementById("message");
-        const message = messageInput.value;
-        const messages = document.getElementById("messages");
-        const messageElement = document.createElement("div");
-        if(recipientId == ""){
-          recipientId = $("#recieverIDInput").val();
-          $("#recipentidspan").html(recipientId == "" ? "No Recipent" : recipientId);
-        }
-        messageElement.innerText = message;
-        messageElement.classList.add(
-          "sender",
-          "px-3",
-          "py-1",
-          "mx-2",
-          "rounded-3",
-        );
-        messages.appendChild(messageElement);
-        const conn = peer.connect(recipientId);
-        conn.on("open", () => {
-          conn.send(message);
-        });
-        messageInput.value = "";
-        $("#messages").scrollTop($("#messages")[0].scrollHeight);
-      }
-      $(document).ready(function(){
-        $("#recipentidspan").html(recipientId == "" ? "No Recipent" : recipientId);
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
