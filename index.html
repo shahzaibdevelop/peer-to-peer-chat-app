@@ -41,6 +41,22 @@
     #recipentidspan{
       cursor: pointer;
     }
+    #messages{
+      height: 80vh;
+      overflow-y: scroll;
+      width: 100%;
+      scrollbar-width: thin;
+      scrollbar-color: #252525 transparent;
+    }
+    ::-webkit-scrollbar-track {
+    border-radius: 16px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 16px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  }
     </style>
   </head>
   <body>
@@ -145,7 +161,6 @@
         const messageElement = document.createElement("div");
         messageElement.classList.add(
           "recieved",
-          // "d-inline",
           "px-3",
           "py-1",
           "mx-2",
@@ -186,7 +201,6 @@
         messageElement.innerText = message;
         messageElement.classList.add(
           "sender",
-          // "d-inline",
           "px-3",
           "py-1",
           "mx-2",
@@ -198,7 +212,7 @@
           conn.send(message);
         });
         messageInput.value = "";
-        window.scrollTo(0, document.body.scrollHeight);
+        $("#messages").scrollTop($("#messages")[0].scrollHeight);
       }
       $(document).ready(function(){
         $("#recipentidspan").html(recipientId == "" ? "No Recipent" : recipientId);
