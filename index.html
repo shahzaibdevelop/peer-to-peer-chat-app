@@ -14,10 +14,12 @@
       .sender {
         background-color: #5c90ff;
         color: white;
+        max-width: max-content; 
       }
       .recieved {
         background-color: grey;
         color: white;
+        max-width: max-content; 
       }
       .bg {
       position: absolute;
@@ -30,6 +32,7 @@
       text-align: center;
       opacity: 0.1;
       user-select: none;
+      z-index: -999;
     }
     .peerid-container{
       background-color: #252525;
@@ -52,7 +55,9 @@
 
     </span>
     </div>
-    <div id="messages" class="d-inline-flex flex-column gap-2 pt-2"></div>
+    <div class="message-box-container vw-100 vh-80">
+      <div id="messages" class="d-inline-flex flex-column gap-2 pt-2"></div>
+    </div>
     <div class="message-container d-flex w-100 gap-2 p-4">
       <input
         type="text"
@@ -116,6 +121,13 @@
       $("#recipentidspan").on("click",function(){
         $("#peeridPrompt").modal("show");
       });
+      document.getElementById("message").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); 
+        enterRecieverID();
+      }
+    });
+
       const peer = new Peer(peerId);
       peer.on("open", () => {
         const peerIdSpan = document.getElementById("peeridspan");
@@ -133,7 +145,7 @@
         const messageElement = document.createElement("div");
         messageElement.classList.add(
           "recieved",
-          "d-inline",
+          // "d-inline",
           "px-3",
           "py-1",
           "mx-2",
@@ -174,7 +186,7 @@
         messageElement.innerText = message;
         messageElement.classList.add(
           "sender",
-          "d-inline",
+          // "d-inline",
           "px-3",
           "py-1",
           "mx-2",

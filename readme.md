@@ -9,3 +9,5 @@
 <p>2. Enter Recipent Peer Id</p>
 
 <p>3. Send Message</p>
+
+<p>4. If want to change recipent id in between chat click on recipent id</p>
